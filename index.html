@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ATS-Friendly Resume Matcher</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* Resetting some defaults */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        /* Body */
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #74ebd5, #9face6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            animation: gradientAnimation 10s infinite alternate;
+        }
+
+        @keyframes gradientAnimation {
+            0% { background: linear-gradient(135deg, #74ebd5, #9face6); }
+            100% { background: linear-gradient(135deg, #9face6, #4f97be); }
+        }
+
+        /* Container */
+        .container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            padding: 40px;
+            width: 80%;
+            max-width: 550px;
+            text-align: center;
+            transform: translateY(-20px);
+            animation: slideUp 1s ease-out forwards;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #00acf0;
+            margin-bottom: 20px;
+            animation: fadeIn 1s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        label {
+            display: block;
+            margin-top: 20px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #555;
+            transition: all 0.3s ease;
+        }
+
+        /* Job Description Textarea */
+        /* Job Description Textarea */
+textarea {
+    width: 100%;
+    min-height: 150px;
+    max-height: 400px;  /* Maximum height */
+    resize: vertical;
+    padding: 15px;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-family: 'Roboto', sans-serif;
+    color: #333;
+    transition: border-color 0.3s ease;
+    overflow-y: auto; /* Enables scrolling when the content exceeds the max-height */
+}
+
+
+        textarea:focus {
+            border-color: #2196f3;
+            outline: none;
+        }
+
+        /* Enhanced File Upload Box */
+        .file-upload-container {
+            position: relative;
+            margin-top: 20px;
+            width: 80%;
+            max-width: 300px;
+            /*border: 2px solid #ccc; */
+            border-radius: 10px;
+            overflow: hidden;
+           /* background-color: #f7f7f7;*/
+            transition: all 0.3s ease;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .file-upload-container:hover {
+            border-color: #2196f3;
+            box-shadow: 0 0 10px rgba(33, 150, 243, 0.5);
+        }
+
+        .file-upload-container input[type="file"] {
+            display: none;
+        }
+
+        .file-upload-btn {
+            display: block;
+            padding: 14px;
+            background-color: #2196f3;
+            color: #fff;
+            text-align: center;
+            cursor: pointer;
+            font-size: 1.1rem;
+            border-radius: 10px;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .file-upload-btn:hover {
+            background-color: #1976d2;
+            transform: scale(1.05);
+        }
+
+        .file-name {
+            display: none;
+            padding: 10px;
+            background-color: #fff;
+            font-size: 1rem;
+            color: #333;
+            text-align: left;
+            border-top: 1px solid #ccc;
+            border-radius: 0 0 10px 10px;
+        }
+
+        button {
+            background-color: #2196f3;
+            color: #fff;
+            border: none;
+            padding: 14px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            border-radius: 30px;
+            margin-top: 25px;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #1976d2;
+            transform: scale(1.05);
+        }
+
+        button:active {
+            transform: scale(1);
+        }
+
+        /* Loading spinner */
+        .loading {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: fadeIn 1s ease-out forwards;
+        }
+
+        .loading img {
+            width: 60px;
+            height: 60px;
+        }
+
+        /* For Responsive design */
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px;
+            }
+            h1 {
+                font-size: 2rem;
+            }
+
+            .file-upload-container {
+                max-width: 250px;
+            }
+        }
+        
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>ATS Friendly Resume Calculator</h1>
+        <form id="resume-form">
+            <label for="job_desc">Job Description:</label>
+            <textarea id="job_desc" name="job_desc" required placeholder="Enter job description here..." oninput="resizeTextArea()"></textarea>
+
+            <label for="resume">Upload Resume:</label>
+            <div class="file-upload-container">
+                <label class="file-upload-btn" for="resume">Choose File</label>
+                <input type="file" id="resume" name="resume" required onchange="displayFileName()">
+                <div class="file-name" id="file-name">No file selected</div>
+            </div>
+
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div class="loading" id="loading">
+        <img src="https://i.gifer.com/4V0t.gif" alt="Loading">
+    </div>
+
+    <script>
+        // Function to update the file name when a file is selected
+        function displayFileName() {
+            const fileInput = document.getElementById('resume');
+            const fileName = fileInput.files.length ? fileInput.files[0].name : 'No file selected';
+            const fileNameDisplay = document.getElementById('file-name');
+            fileNameDisplay.textContent = fileName;
+            fileNameDisplay.style.display = fileInput.files.length ? 'block' : 'none';
+        }
+
+        // Resize the textarea based on input
+        function resizeTextArea() {
+            const textArea = document.getElementById('job_desc');
+            textArea.style.height = 'auto';
+            textArea.style.height = textArea.scrollHeight + 'px';
+        }
+
+        document.getElementById("resume-form").addEventListener("submit", async function(event) {
+            event.preventDefault(); // Prevent default form submission
+            const loadingElement = document.getElementById('loading');
+            loadingElement.style.display = 'block'; // Show loading spinner
+
+            let formData = new FormData();
+            formData.append("job_desc", document.getElementById("job_desc").value);
+            formData.append("resume", document.getElementById("resume").files[0]);
+
+            try {
+                let response = await fetch("http://127.0.0.1:5000/upload", {
+                    method: "POST",
+                    body: formData
+                });
+                
+                let data = await response.json();
+
+                loadingElement.style.display = 'none'; // Hide loading spinner
+                if (response.ok) {
+                    window.location.href = `results.html?match=${data.match_percentage}`;
+                } else {
+                    alert("Error: " + data.error);
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                loadingElement.style.display = 'none'; // Hide loading spinner
+                alert("There was an error processing your request. Please try again.");
+            }
+        });
+    </script>
+</body>
+
+
+</html>
