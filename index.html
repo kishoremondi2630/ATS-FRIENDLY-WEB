@@ -30,17 +30,43 @@
         }
 
         /* Container */
-        .container {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-            padding: 40px;
-            width: 80%;
-            max-width: 550px;
-            text-align: center;
-            transform: translateY(-20px);
-            animation: slideUp 1s ease-out forwards;
-        }
+        /* Updated Container */
+.container {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    padding: 40px;
+    width: 80%;
+    max-width: 550px;
+    max-height: 90vh; /* Limit container height */
+    overflow-y: auto; /* Enable scrolling for container */
+    text-align: center;
+    transform: translateY(-20px);
+    animation: slideUp 1s ease-out forwards;
+}
+
+/* Updated Textarea */
+textarea {
+    width: 100%;
+    min-height: 150px;
+    max-height: 200px; /* Reduced max height */
+    padding: 15px;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-family: 'Roboto', sans-serif;
+    color: #333;
+    transition: border-color 0.3s ease;
+    overflow-y: auto; /* Always show scrollbar when needed */
+    resize: vertical; /* Allow vertical resize */
+}
+
+/* Add this to ensure form elements stay properly spaced */
+#resume-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
 
         @keyframes slideUp {
             from {

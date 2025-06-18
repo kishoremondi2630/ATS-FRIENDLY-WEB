@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import os
-import docx2txt
+# import docx2txt
 import PyPDF2
 import spacy
 from sklearn.feature_extraction.text import TfidfVectorizer
